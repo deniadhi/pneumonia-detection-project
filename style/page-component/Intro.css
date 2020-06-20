@@ -1,0 +1,12 @@
+.text {
+    color: white;
+}
+
+#intro-content {
+    width: fit-content;
+    margin: 15% 0 0 15%;
+}
+
+#input-img {
+    display: none;
+}
