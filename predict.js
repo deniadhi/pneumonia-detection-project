@@ -14,7 +14,7 @@ let model;
 $( document ).ready(async function () {
 	$('.progress-bar').show();
     console.log( "Loading model..." );
-    model = await tf.loadGraphModel('https://github.com/deniadhi/pneumonia-detection-project/raw/master/tensorflowjs_model/model.json');
+    model = await tf.loadLayersModel('./tensorflowjs_model/model.json');
     console.log( "Model loaded." );
 	$('.progress-bar').hide();
 });
