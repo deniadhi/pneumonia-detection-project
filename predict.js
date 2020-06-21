@@ -12,37 +12,44 @@ $("#image-selector").change(function () {
 
 let model;
 $( document ).ready(async function () {
-	$('.progress-bar').show();
-    console.log( "Loading model..." );
-    model = await tf.loadLayersModel('./tensorflowjs_model/model.json');
-    console.log( "Model loaded." );
-	$('.progress-bar').hide();
+	const MODEL_PATH = 'tensorflowjs_model/model.json';
+	console.log('loading model..');
+	model = await tf.loadLayersModel(MODEL_PATH, {});
+	console.log('model loaded...');
+	
 });
 
+
 $("#predict-button").click(async function () {
-	let image = $('#selected-image').get(0);
+	const logits = tf.tidy(() => {
+		let image = $('#selected-image').get(0);
+		
+		// Pre-process the image
+		console.log( "Loading image..." );
+		const IMAGE_SIZE = 227;
+		const normalizationConstant = 1.0 / 255.0;
+		let img = tf.browser.fromPixels(image, 1)
+			.resizeBilinear([IMAGE_SIZE, IMAGE_SIZE], false)
+			.expandDims(0)
+			.toFloat()
+			.mul(normalizationConstant);
+			
+		return model.predict(img);
+	});
 	
-	// Pre-process the image
-	console.log( "Loading image..." );
-	let tensor = tf.browser.fromPixels(image, 3)
-		.resizeNearestNeighbor([224, 224]) // change the image size
-		.expandDims()
-		.toFloat()
-		.reverse(-1); // RGB -> BGR
-	let predictions = await model.predict(tensor).data();
-	console.log(predictions);
-	let top5 = Array.from(predictions)
-		.map(function (p, i) { // this is Array.map
+	
+	const classes = await logits.data();
+	console.log(classes);
+	let arr = Array.from(classes)
+		.map(function (p, i) { 
 			return {
 				probability: p,
-				className: TARGET_CLASSES[i] // we are selecting the value from the obj
+				className: TARGET_CLASSES[i] 
 			};
-		}).sort(function (a, b) {
-			return b.probability - a.probability;
 		}).slice(0, 2);
 
 	$("#prediction-list").empty();
-	top5.forEach(function (p) {
+	arr.forEach(function (p) {
 		$("#prediction-list").append(`<li>${p.className}: ${p.probability.toFixed(6)}</li>`);
 		});
 });
