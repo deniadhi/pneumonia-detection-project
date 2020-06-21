@@ -11,7 +11,7 @@
 	<script>
 		const MODEL_PATH = 'tensorflowjs_model/model.json';
 		let model;
-		export const loadModel = async () => {
+		exports.loadModel = async () => {
 			console.log('loading model...');
 			model = await tf.loadLayersModel(MODEL_PATH, {});
 			model.summary();
