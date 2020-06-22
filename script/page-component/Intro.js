@@ -14,7 +14,7 @@ class Intro {
   onSubmitUploadFile() {
     const self = this;
     $("#input-img").change(function (event) {
-      self.uploadImageCallback(event.target.files[0]);
+		self.uploadImageCallback(event.target.files[0]);
     })
   }
 

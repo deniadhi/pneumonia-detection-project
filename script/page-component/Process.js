@@ -10,22 +10,26 @@ class Process {
         //const model = await tf.loadLayersModel('../../model/model.json');
     }
 	
-    tobase64Image() {
+    async tobase64Image(callback) {
         let reader = new FileReader();
         reader.onload = function (e) {
-            $('#tes').attr('src', e.target.result);
+			callback(e.target.result);
         }
         reader.readAsDataURL(this.image); // convert to base64 string
     }
 
 	async predict() {
+		const imgElement = await this.tobase64Image(function(strImg) {
+			let c = $("<img src=" + strImg + ">");
+			console.log(c[0]);
+			return c[0];
+		});
 		const logits = tf.tidy(() => {
-			
 			// Pre-process the image
 			console.log( "Loading image..." );
 			const IMAGE_SIZE = 227;
 			const normalizationConstant = 1.0 / 255.0;
-			let img = tf.browser.fromPixels($("<img src=" + this.tobase64Image() + ">"), 1)
+			let img = tf.browser.fromPixels(imgElement, 1)
 				.resizeBilinear([IMAGE_SIZE, IMAGE_SIZE], false)
 				.expandDims(0)
 				.toFloat()

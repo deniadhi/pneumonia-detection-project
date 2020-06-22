@@ -5,9 +5,10 @@ let resultView;
 let introPageCallback = function(image){
 	fadeAndRemove(
         introView,
-		function(image) {
-			processView = initPage(new Process(image, processPageCallback));
-		}
+		function(data) {
+			processView = initPage(new Process(data[0], processPageCallback));
+		},
+		image
     );
 }
 
@@ -16,16 +17,16 @@ let processPageCallback = function(image, result) {
         processView,
 		function(image, result) {
 			resultView = initPage(new Result(image, result));
-		}
+		}, image, result
     );
 }
 
-function fadeAndRemove(viewId, callback) {
+function fadeAndRemove(viewId, callback, ...args) {
 	$(viewId).fadeOut(
         2000,
         function() {
             $(viewId).remove();
-			callback();
+			callback(args);
         }
     );
 }
