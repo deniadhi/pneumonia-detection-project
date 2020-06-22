@@ -50,6 +50,6 @@ $("#predict-button").click(async function () {
 
 	$("#prediction-list").empty();
 	arr.forEach(function (p) {
-		$("#prediction-list").append(`<li>${p.className}: ${p.probability.toFixed(6)}</li>`);
+		$("#prediction-list").append(`<li>${p.className} Chance: ${p.probability.toFixed(6)}</li>`);
 		});
 });
