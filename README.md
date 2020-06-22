@@ -32,6 +32,12 @@ Since training a CNN model will require strong computational specs, it is recomm
 1. Set up a billing account for your project. Check this link: https://cloud.google.com/billing/docs/how-to/modify-project
 
 ## Web Application
+1. Create the index.html file
+   * You can upload your own image to the website.
+   * By clicking the button, it will be used to start the prediction.
+   * The script ```predict.js``` will be used to implement the model and ```target_classes.js``` contains the classes for the predictions.
+1. Create the predict.js file
+   * This is where the model will be loaded and used to predict the class of the images
 
 ## Deployment
 1. Open your Google Cloud Console then click on the Cloud Shell on the top right of the screen
