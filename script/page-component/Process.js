@@ -1,6 +1,7 @@
 class Process {
-    constructor(image) {
+    constructor(image, processPageCallback) {
         this.image = image;
+		this.processPageCallback = processPageCallback;
     }
 
     ID = "process-content"
@@ -9,8 +10,23 @@ class Process {
         const model = await tf.loadLayersModel('../../model/model.json');
     }
 
+	async predict() {
+		this.loadModel().then(function() {
+		// disini nanti predictnya
+		});
+	}
+
+	getResult() {
+		this.predict().then(function(result) {
+			this.processPageCallback(
+				this.image,
+				result
+			)
+		});
+	}
+
     getView() {
-        this.loadModel();
+		this.getResult();
         return (
             `
             <div id='${this.ID}'>

@@ -1,35 +1,46 @@
 let introView;
 let processView;
+let resultView;
 
 let introPageCallback = function(image){
-    hideIntroAndDisplayProcessFor(
-        image
+	fadeAndRemove(
+        introView,
+		function(image) {
+			processView = initPage(new Process(image, processPageCallback));
+		}
     );
 }
 
-function initIntroPage() {
-    introPage = new Intro(introPageCallback);
-    $("body").html(introPage.getView());
-    introPage.initEventCallback();
-    introView = "#" + introPage.ID;
+let processPageCallback = function(image, result) {
+	fadeAndRemove(
+        processView,
+		function(image, result) {
+			resultView = initPage(new Result(image, result));
+		}
+    );
 }
 
-function hideIntroAndDisplayProcessFor(image) {
-    $(introView).fadeOut(
+function fadeAndRemove(viewId, callback) {
+	$(viewId).fadeOut(
         2000,
         function() {
-            $(introView).remove();
-            initProcessPage(image);
+            $(viewId).remove();
+			callback();
         }
     );
 }
 
-function initProcessPage(image) {
-    processPage = new Process(image)
-    $("body").html(processPage.getView());
-    processView = "#" + processPage.ID;
+function initPage(page, eventExist=false) {
+	$("body").html(page.getView());
+	if(eventExist) {
+		page.initEventCallback();
+	}
+	return "#" + page.ID;
 }
 
 $(document).ready(function () {
-    initIntroPage();
+    introView = initPage(
+		new Intro(introPageCallback),
+		eventExist=true
+	)
 });
